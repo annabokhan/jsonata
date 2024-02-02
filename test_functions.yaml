@@ -1,5 +1,5 @@
 test_functions: >-
-${ (
+  ${ (
     $appendPath := function($prefix, $path) {
       $prefix & '/' & $path
     };
@@ -55,5 +55,4 @@ ${ (
           'result': 'passed'
         }
     )};
-)
-}
+  ) }
