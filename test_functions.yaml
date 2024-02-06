@@ -10,11 +10,11 @@ compare: |-
       $actual_keys := $keys($actual);
       $expected_keys := $keys($expected);
       
-      $extra_keys := $filter($actual_keys, function($key) { $not($key in $expected_keys) }) ~> $map($appendPath($path, ?));
-      $missing_keys := $filter($expected_keys, function($key) { $not($key in $actual_keys) }) ~> $map($appendPath($path, ?));
+      $extra_keys := $filter($actual_keys, function($key) { $not($key in $expected_keys) }) ~> $map(appendPath($path, ?));
+      $missing_keys := $filter($expected_keys, function($key) { $not($key in $actual_keys) }) ~> $map(appendPath($path, ?));
       
       $diff := $map($actual_keys, function($key) {
-         $key in $expected_keys ? $findDiff($lookup($actual, $key), $lookup($expected, $key), $appendPath($path, $key))
+         $key in $expected_keys ? findDiff($lookup($actual, $key), $lookup($expected, $key), appendPath($path, $key))
       });
       
       {
@@ -38,11 +38,11 @@ findDiff: |-
                  $count($actual) != $count($expected) ?
                      {'diff': {'path': $path, 'diff': 'count', 'expected': $count($expected), 'actual': $count($actual)}}
                      : $map($actual, function($item, $i) {
-                         $compare($item, $expected[$i], $path & '[' & $i & ']' )
+                         compare($item, $expected[$i], $path & '[' & $i & ']' )
                      })~>$reduce($append);
             ) :
             $type($actual) = 'object' ? 
-              $compare($actual, $expected, $path) :
+              compare($actual, $expected, $path) :
               {
                  'diff': {'path': $path, 'diff': 'value', 'expected': $expected, 'actual': $actual}
               }
@@ -54,7 +54,7 @@ runTest: |-
     function($name, $function, $input, $expected) {(
       $actual := $eval($function, $input);
       ($actual != $expected) ? (
-        $errors := $compare($actual, $expected);
+        $errors := compare($actual, $expected);
         $errorReport($errors~>|$|{'test': $name}|);
         {
           'test': $name,
