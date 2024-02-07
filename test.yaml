@@ -7,18 +7,20 @@ runTest: |-
     $compare := function($actual, $expected, $path) {(
       $actual_keys := $keys($actual);
       $expected_keys := $keys($expected);
-
-      $extra_keys := $filter($actual_keys, function($key) { $not($key in $expected_keys) }) ~> $map($appendPath($path, ?));
-      $missing_keys := $filter($expected_keys, function($key) { $not($key in $actual_keys) }) ~> $map($appendPath($path, ?));
+  
+      $appender := function($p){appendPath($path, $p)};
+      
+      $extra_keys := $filter($actual_keys, function($key) { $not($key in $expected_keys) }) ~> $map($appender);
+      $missing_keys := $filter($expected_keys, function($key) { $not($key in $actual_keys) }) ~> $map($appender);
 
       $diff := $map($actual_keys, function($key) {
-          $key in $expected_keys ? $findDiff($lookup($actual, $key), $lookup($expected, $key), $appendPath($path, $key))
+         $key in $expected_keys ? findDiff($lookup($actual, $key), $lookup($expected, $key), appendPath($path, $key))
       });
-
+      
       {
-          "missing": $missing_keys ~> $append($diff.missing),
-          "extra": $extra_keys ~> $append($diff.extra),
-          "diff": $diff.diff[]
+         "missing": $missing_keys ~> $append($diff.missing),
+         "extra": $extra_keys ~> $append($diff.extra),
+         "diff": $diff.diff[]
       }
     )};
 
