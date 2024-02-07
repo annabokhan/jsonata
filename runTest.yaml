@@ -1,5 +1,5 @@
 runTest: |-
-  (
+  ${ (
     $appendPath := function($prefix, $path) {
       $prefix & '/' & $path
     };
@@ -55,4 +55,4 @@ runTest: |-
           'result': 'passed'
         }
     )}
-  )
+  ) }
