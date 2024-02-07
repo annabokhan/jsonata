@@ -42,7 +42,7 @@ runTest: |-
     )};
 
     function($name, $expression, $input, $expected) { (
-      $assert($type($expression) != 'string', "Expression is not a string");
+      $assert($expression != undefined, "Expression must be set");
       $assert($name != undefined, "Name must be set");
       
       $actual := $eval($expression, $input);
