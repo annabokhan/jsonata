@@ -1,0 +1,8 @@
+test: |-
+  ${
+    function($prefix, $path) { (
+      $assert($prefix != undefined, "prefix must be set");
+      $assert($path != undefined, "path must be set");
+      $prefix & '/' & $path;
+    ) }
+  };
