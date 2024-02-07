@@ -42,7 +42,7 @@ runTest: |-
     function($name, $function, $input, $expected) { (
       $assert($function != null, "Function must be set");
       $assert($type($function) != function, "Function is not valid");
-      $assert($name != undefined, "Name must be set"");
+      $assert($name != undefined, "Name must be set");
       
       $actual := $eval($function, $input);
       ($actual != $expected) ? (
